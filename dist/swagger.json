@@ -1,0 +1,1078 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "version": "1.0.0",
+        "title": "Knowledge 360 - Rewards 360 module",
+        "description": "An API that allows external systems to obtain and update information in Rewards 360 data",
+        "contact": {
+            "name": "RelevanceLogic Support Team",
+            "email": "support@relevancelogic.com",
+            "url": "http://www.relevancelogic.com/support"
+        },
+        "license": {
+            "name": "MIT",
+            "url": "http://github.com/gruntjs/grunt/blob/master/LICENSE.MIT"
+        }
+    },
+    "host": "badgingdemo1.relevancelogic.com",
+    "basePath": "/api/v1",
+    "schemes": [
+        "http"
+    ],
+    "consumes": [
+        "application/json"
+    ],
+    "produces": [
+        "application/json"
+    ],
+    "paths": {
+        "/users/signin": {
+            "get": {
+                "summary": "Sign In",
+                "description": "Allows third party to sign into Knowledge 360 and obtain a hash key for all other API calls.",
+                "operationId": "apiSignIn",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "userName",
+                        "in": "query",
+                        "description": "Assigned user name for Knowledge 360 system",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "password",
+                        "in": "query",
+                        "description": "Assigned password for user name",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "tags": [
+                    "Authentication"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful sign in that returns a 30 character hash key.",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "default": {
+                        "description": "Unexpected error",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    }
+                }
+            }
+        },
+        "/user": {
+            "post": {
+                "summary": "Add User",
+                "description": "Creates a new user in the Knowledge 360 system. Each user must be unique.",
+                "operationId": "addUser",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "key",
+                        "in": "query",
+                        "description": "User hash key obtained when last logged in.",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "user",
+                        "in": "body",
+                        "description": "User to add to Knowledge 360",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/User"
+                        }
+                    }
+                ],
+                "tags": [
+                    "Users"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful add of a new user",
+                        "schema": {
+                            "$ref": "#/definitions/User"
+                        }
+                    },
+                    "401": {
+                        "description": "Duplicate  - User already exists",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "403": {
+                        "description": "Invalid hash key",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "default": {
+                        "description": "Unexpected error",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    }
+                }
+            }
+        },
+        "/user/update": {
+            "post": {
+                "summary": "Update User",
+                "description": "Updates an existing user in the Knowledge 360 system.",
+                "operationId": "updateUser",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "key",
+                        "in": "query",
+                        "description": "User hash key obtained when last logged in.",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "user",
+                        "in": "body",
+                        "description": "User to update in Knowledge 360",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/User"
+                        }
+                    }
+                ],
+                "tags": [
+                    "Users"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful update of existing user",
+                        "schema": {
+                            "$ref": "#/definitions/User"
+                        }
+                    },
+                    "401": {
+                        "description": "Not Found - User does not exist",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "403": {
+                        "description": "Invalid hash key",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "default": {
+                        "description": "Unexpected error",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    }
+                }
+            }
+        },
+        "/course": {
+            "post": {
+                "summary": "Add Course",
+                "description": "Add a new course to the Knowledge 360 system.",
+                "operationId": "addCourse",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "key",
+                        "in": "query",
+                        "description": "User hash key obtained when last logged in.",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "course",
+                        "in": "body",
+                        "description": "Course to add in Knowledge 360",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/Course"
+                        }
+                    }
+                ],
+                "tags": [
+                    "Courses"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful add of new course",
+                        "schema": {
+                            "$ref": "#/definitions/Course"
+                        }
+                    },
+                    "401": {
+                        "description": "Not Found - Course already exists",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "403": {
+                        "description": "Invalid hash key",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "default": {
+                        "description": "Unexpected error",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    }
+                }
+            }
+        },
+        "/course/update": {
+            "post": {
+                "summary": "Update Course",
+                "description": "Updates an existing course in the Knowledge 360 system.",
+                "operationId": "updateCourse",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "key",
+                        "in": "query",
+                        "description": "User hash key obtained when last logged in.",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "user",
+                        "in": "body",
+                        "description": "Course to update in Knowledge 360",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/Course"
+                        }
+                    }
+                ],
+                "tags": [
+                    "Courses"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful update of existing course",
+                        "schema": {
+                            "$ref": "#/definitions/Course"
+                        }
+                    },
+                    "401": {
+                        "description": "Not Found - Course does not exist",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "403": {
+                        "description": "Invalid hash key",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "default": {
+                        "description": "Unexpected error",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    }
+                }
+            }
+        },
+        "/outcome": {
+            "post": {
+                "summary": "Add Outcome",
+                "description": "Add a new outcome to the Knowledge 360 system.",
+                "operationId": "addOutcome",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "key",
+                        "in": "query",
+                        "description": "User hash key obtained when last logged in.",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "outcome",
+                        "in": "body",
+                        "description": "Outcome to add in Knowledge 360",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/Outcome"
+                        }
+                    }
+                ],
+                "tags": [
+                    "Outcomes"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful add of new outcome",
+                        "schema": {
+                            "$ref": "#/definitions/Outcome"
+                        }
+                    },
+                    "401": {
+                        "description": "Not Found - Outcome already exists",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "403": {
+                        "description": "Invalid hash key",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "default": {
+                        "description": "Unexpected error",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    }
+                }
+            }
+        },
+        "/outcome/update": {
+            "post": {
+                "summary": "Update Outcome",
+                "description": "Updates an existing outcome in the Knowledge 360 system.",
+                "operationId": "updateOutcome",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "key",
+                        "in": "query",
+                        "description": "User hash key obtained when last logged in.",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "user",
+                        "in": "body",
+                        "description": "Outcome to update in Knowledge 360",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/Outcome"
+                        }
+                    }
+                ],
+                "tags": [
+                    "Outcomes"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful update of existing outcome",
+                        "schema": {
+                            "$ref": "#/definitions/Outcome"
+                        }
+                    },
+                    "401": {
+                        "description": "Not Found - Outcome does not exist",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "403": {
+                        "description": "Invalid hash key",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "default": {
+                        "description": "Unexpected error",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    }
+                }
+            }
+        },
+        "/outcome/delete": {
+            "post": {
+                "summary": "Delete Outcome",
+                "description": "Deletes an existing outcome in the Knowledge 360 system.",
+                "operationId": "deleteOutcome",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "key",
+                        "in": "query",
+                        "description": "User hash key obtained when last logged in.",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "user",
+                        "in": "body",
+                        "description": "Outcome to delete in Knowledge 360",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/OutcomeKey"
+                        }
+                    }
+                ],
+                "tags": [
+                    "Outcomes"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful delete of existing outcome",
+                        "schema": {
+                            "$ref": "#/definitions/Outcome"
+                        }
+                    },
+                    "401": {
+                        "description": "Not Found - Outcome does not exist",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "403": {
+                        "description": "Invalid hash key",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "default": {
+                        "description": "Unexpected error",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    }
+                }
+            }
+        },
+        "/badge": {
+            "post": {
+                "summary": "Add Badge",
+                "description": "Add a new badge to the Knowledge 360 system.",
+                "operationId": "addBadge",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "key",
+                        "in": "query",
+                        "description": "User hash key obtained when last logged in.",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "course",
+                        "in": "body",
+                        "description": "Badge to add in Knowledge 360",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/Badge"
+                        }
+                    }
+                ],
+                "tags": [
+                    "Badges"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful add of new badge",
+                        "schema": {
+                            "$ref": "#/definitions/Badge"
+                        }
+                    },
+                    "401": {
+                        "description": "Not Found - Badge already exists",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "403": {
+                        "description": "Invalid hash key",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "default": {
+                        "description": "Unexpected error",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    }
+                }
+            }
+        },
+        "/badge/update": {
+            "post": {
+                "summary": "Update Badge",
+                "description": "Updates an existing badge in the Knowledge 360 system.",
+                "operationId": "updateBadge",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "key",
+                        "in": "query",
+                        "description": "User hash key obtained when last logged in.",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "user",
+                        "in": "body",
+                        "description": "Badge to update in Knowledge 360",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/Badge"
+                        }
+                    }
+                ],
+                "tags": [
+                    "Badges"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful update of existing badge",
+                        "schema": {
+                            "$ref": "#/definitions/Badge"
+                        }
+                    },
+                    "401": {
+                        "description": "Not Found - Badge does not exist",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "403": {
+                        "description": "Invalid hash key",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "default": {
+                        "description": "Unexpected error",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    }
+                }
+            }
+        },
+        "/badgeStatus/update": {
+            "post": {
+                "summary": "Update Badge Instance Status",
+                "description": "Updates an existing badge instance's status in the Knowledge 360 system.",
+                "operationId": "updateBadgeStatus",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "key",
+                        "in": "query",
+                        "description": "User hash key obtained when last logged in.",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "userName",
+                        "in": "query",
+                        "description": "Assigned user name for Knowledge 360 system",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "badgeStatus",
+                        "in": "body",
+                        "description": "Badge instance to update in Knowledge 360",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/BadgeStatus"
+                        }
+                    }
+                ],
+                "tags": [
+                    "Badges"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful update of existing badge instance",
+                        "schema": {
+                            "$ref": "#/definitions/BadgeStatus"
+                        }
+                    },
+                    "401": {
+                        "description": "Not Found - Badge does not exist",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "402": {
+                        "description": "Status Error - Invalid status change",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "403": {
+                        "description": "Invalid hash key",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "default": {
+                        "description": "Unexpected error",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    }
+                }
+            }
+        },
+        "/getBadgeStatusByUser.json": {
+            "get": {
+                "summary": "Badge Status by User",
+                "description": "Returns Badge Instance Details by User.",
+                "operationId": "listBadgesByUser",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "key",
+                        "in": "query",
+                        "description": "User hash key obtained when last logged in.",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "userName",
+                        "in": "query",
+                        "description": "Assigned user name for Knowledge 360 system",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "tags": [
+                    "Badges"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Returns an array of Badge Instance Objects for a given user.",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/BadgeInstance"
+                            }
+                        },
+                        "examples": {
+                            "application/json": {
+                                "badge_id": 13,
+                                "badge_name": "Water Wise Landscape Design",
+                                "badge_description": "Discover six steps to landscape design, including why the process is important and water savings involved. This badge covers site analysis regarding how family values play into landscape design; what hydrozoning means for water savings and plant selection; and how to use rectilinear, curvilinear, and angular design styles. You'll finish the course with tips and tricks to mix lines, color, texture, and form with scale, balance, simplicity, variety, emphasis and sequence to create unity and pizzazz in your designs.",
+                                "user_organization": "Colorado State University OnlinePlus",
+                                "badge_level": "Trek",
+                                "date_awarded": "2014-09-02T00:00:00.000Z",
+                                "life_cycle_expiration": "2015-09-02T00:00:00.000Z"
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Invalid hash key",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "default": {
+                        "description": "Unexpected error",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    }
+                }
+            }
+        },
+        "/getBadgeStatusByOrg.json": {
+            "get": {
+                "summary": "Badge Status by Organization",
+                "description": "Returns Badge Instance Details for each user by Organization.",
+                "operationId": "listBadgesByOrg",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "key",
+                        "in": "query",
+                        "description": "User hash key obtained when last logged in.",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "orgName",
+                        "in": "query",
+                        "description": "Valid org name for Knowledge 360 system",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "tags": [
+                    "Badges"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Returns an array of Badge Instance Objects for a given organization.",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/BadgeInstance"
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Invalid hash key",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "default": {
+                        "description": "Unexpected error",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "User": {
+            "properties": {
+                "user_name": {
+                    "type": "string",
+                    "description": "User name of Knowledge 360 user (requested  for add)."
+                },
+                "password": {
+                    "type": "string",
+                    "description": "password for user (only required for add or to update password)"
+                },
+                "authority": {
+                    "type": "string",
+                    "description": "Provides access control (can be either Student or Administrator or Teacher)",
+                    "enum": [
+                        "Student",
+                        "Administrator",
+                        "Teacher"
+                    ]
+                },
+                "first_name": {
+                    "type": "string",
+                    "description": "first name of the Knowledge 360 user"
+                },
+                "sur_name": {
+                    "type": "string",
+                    "description": "last (or surname) of the Knowledge 360 user"
+                },
+                "organization_name": {
+                    "type": "string",
+                    "description": "organization in Knowledge 360 that the user will be part of"
+                },
+                "email_address": {
+                    "type": "string",
+                    "description": "valid email address"
+                },
+                "phone_number": {
+                    "type": "string",
+                    "description": "phone number of user without any non-numeric characters (ex. 3035551212)"
+                },
+                "locale": {
+                    "type": "string",
+                    "description": "currently en-US only",
+                    "enum": [
+                        "en-US"
+                    ]
+                }
+            }
+        },
+        "Error": {
+            "properties": {
+                "code": {
+                    "type": "integer",
+                    "format": "int32",
+                    "description": "code indicating whether the request was successfully or not."
+                },
+                "message": {
+                    "type": "string",
+                    "description": "text string that contains the message that further describes success or failure condition."
+                },
+                "fields": {
+                    "type": "string",
+                    "description": "contains a comma delimited string that shows what field is in error"
+                }
+            }
+        },
+        "Course": {
+            "properties": {
+                "course_name": {
+                    "type": "string",
+                    "description": "name of course for Knowledge 360"
+                },
+                "course_id": {
+                    "type": "string",
+                    "description": "id of course for Knowledge 360"
+                },
+                "course_description": {
+                    "type": "string",
+                    "description": "summary description of course to be used as a foundation for any badge descriptions"
+                },
+                "course_url": {
+                    "type": "string",
+                    "description": "full url to link course in Knowledge 360 to an existing web presence for a course"
+                },
+                "course_program_area": {
+                    "type": "string",
+                    "description": "main category for the course to be used to organization courses and related badges into a catalog"
+                },
+                "course_sub_program": {
+                    "type": "string",
+                    "description": "sub category to be used with a category"
+                },
+                "course_delivery_location": {
+                    "type": "string",
+                    "description": "information that indicates how the training will be taken",
+                    "enum": [
+                        "Online",
+                        "Classroom",
+                        "Mixed",
+                        "Mail"
+                    ]
+                }
+            }
+        },
+        "Outcome": {
+            "properties": {
+                "outcome_type": {
+                    "type": "string",
+                    "description": "indicates whether outcome is tied to a course or a badge (non-course based badges)",
+                    "enum": [
+                        "Course",
+                        "Badge"
+                    ]
+                },
+                "course_badge_name": {
+                    "type": "string",
+                    "description": "name of course or badge in Knowledge 360. Course or badge must exist for outcome object to be added."
+                },
+                "sequence_number": {
+                    "type": "integer",
+                    "format": "int32",
+                    "description": "a number that specifies the sequence that the outcomes are listed on the Badge and Course descriptions"
+                },
+                "outcome_name": {
+                    "type": "string",
+                    "description": "short name of the outcome"
+                },
+                "outcome_description": {
+                    "type": "string",
+                    "description": "long description of the outcome"
+                }
+            }
+        },
+        "Badge": {
+            "properties": {
+                "badge_type": {
+                    "type": "string",
+                    "description": "the type of badge that indicates how the badge will be created and managed. No course required creates the badge directly in Knowledge 360. Course based uses an existing course to model the badge name, description and outcomes from. Course pending is like no course required, but leaves open the opportunity to hook the badge to a course at a later date. Activity based badges will not be associated to a course and are designed to be given for accomplishing a specific activity.",
+                    "enum": [
+                        "No Course Rqd",
+                        "Course Based",
+                        "Course Pending",
+                        "Activity Based"
+                    ]
+                },
+                "course_name": {
+                    "type": "string",
+                    "description": "used only with course-based badges and must be amn existing Knowledge 360 course name"
+                },
+                "badge_name": {
+                    "type": "string",
+                    "description": "used with no course required, course pending, and activity badges and must not currently be an exisitng badge name."
+                },
+                "badge_description": {
+                    "type": "string",
+                    "description": "used only with no course required, course pending, and activity badges. Must be blank for coursed-based badges."
+                },
+                "user_organization": {
+                    "type": "string",
+                    "description": "must be an existing Knowledge 360 organization and will reflect the group the user is associated with"
+                },
+                "badge_level": {
+                    "type": "string",
+                    "description": "indicates a what level in a badging hierarchy that the badge is placed",
+                    "enum": [
+                        "Journey",
+                        "Quest",
+                        "Trek"
+                    ]
+                },
+                "parent_badge": {
+                    "type": "string",
+                    "description": "ties a new badge to an existing badge for parentage. If no parent is needed, the value of None must be included otherwise include a valid Knowledge 360 badge"
+                },
+                "life_cycle_option": {
+                    "type": "string",
+                    "description": "indicates whether and how badge expirations should be handled",
+                    "enum": [
+                        "No Expiration",
+                        "Duration",
+                        "Fixed Date"
+                    ]
+                },
+                "life_cycle_period": {
+                    "type": "integer",
+                    "format": "int32",
+                    "description": "used only for badges with life cycle options of duration. number of months from award date that badge expires. Option periods are current set at 6, 12 ,24 ,36, 48 and 60 months",
+                    "enum": [
+                        6,
+                        12,
+                        24,
+                        36,
+                        48,
+                        60
+                    ]
+                },
+                "life_cycle_expiration": {
+                    "type": "string",
+                    "description": "only required for Fixed Date badges and reflects date that badge should expire no matter when it was issued. Must be a date in the future in the format yyyy-mm-dd."
+                }
+            }
+        },
+        "OutcomeKey": {
+            "properties": {
+                "course_badge_name": {
+                    "type": "string",
+                    "description": "name of course or badge in Knowledge 360. Course or badge must exist for outcome object to be added."
+                },
+                "outcome_name": {
+                    "type": "string",
+                    "description": "short name of the outcome"
+                }
+            }
+        },
+        "BadgeStatus": {
+            "properties": {
+                "user_name": {
+                    "type": "string",
+                    "description": "User name of Knowledge 360 user (requested  for add)."
+                },
+                "badge_name": {
+                    "type": "string",
+                    "description": "used with no course required, course pending, and activity badges and must not currently be an exisitng badge name."
+                },
+                "badge_status": {
+                    "type": "integer",
+                    "format": "int32",
+                    "description": "badge status is used to advance the life cycle of a badge. The statuses are Registered (1), InProgress(2), Earned(3), Awarded(4), Criteria Not Met(5) and Dropped(6). One other status is supported in Knowledge 360 of Planned (0), but is not supported in the current API. Currently, the API only supports moving badge statuses forward one step at a time.",
+                    "enum": [
+                        1,
+                        2,
+                        3,
+                        4,
+                        5,
+                        6
+                    ]
+                },
+                "date_awarded": {
+                    "type": "string",
+                    "description": "only required for a Awarded status change, otherwise should be blank.  This reflects the date that badge was actually awarded on and must be a date in the future in the format yyyy-mm-dd."
+                }
+            }
+        },
+        "BadgeInstance": {
+            "properties": {
+                "badge_id": {
+                    "type": "integer",
+                    "format": "int64",
+                    "description": "key assigned to badge instance (a user's specific badge) by Knowledge 360."
+                },
+                "user_name": {
+                    "type": "string",
+                    "description": "user name of badge from Knowledge 360."
+                },
+                "user_first_name": {
+                    "type": "string",
+                    "description": "first name of user with badge from Knowledge 360."
+                },
+                "user_sur_name": {
+                    "type": "string",
+                    "description": "sur (or last) name of user with badge from Knowledge 360."
+                },
+                "badge_name": {
+                    "type": "string",
+                    "description": "badge name set up in Knowledge 360"
+                },
+                "badge_description": {
+                    "type": "string",
+                    "description": "badge description set up in Knowledge 360"
+                },
+                "user_organization": {
+                    "type": "string",
+                    "description": "the existing Knowledge 360 organization assigned to the user"
+                },
+                "badge_level": {
+                    "type": "string",
+                    "description": "indicates a what level in a badging hierarchy that the badge is",
+                    "enum": [
+                        "Journey",
+                        "Quest",
+                        "Trek"
+                    ]
+                },
+                "badge_status_name": {
+                    "type": "string",
+                    "description": "badge status is used to advance the life cycle of a badge. The statuses are Planned (0), Registered (1), InProgress(2), Earned(3), Awarded(4), Criteria Not Met(5) and Dropped(6).",
+                    "enum": [
+                        "Planned",
+                        "Registered",
+                        "InProgress",
+                        "Earned",
+                        "Awarded",
+                        "Criteria Not Met",
+                        "Dropped"
+                    ]
+                },
+                "date_awarded": {
+                    "type": "string",
+                    "description": "Only included if badge status is Awarded. This field will contain the date (yyyy-mm-dd) the badge was issued."
+                },
+                "life_cycle_expiration": {
+                    "type": "string",
+                    "description": "Only included if badge status is Awarded and has a life cycle option that sets an expiration date. This shows when a badge will expired (yyyy-mm-dd)."
+                }
+            }
+        }
+    }
+}
